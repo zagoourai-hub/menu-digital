@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, useEffect, useRef, useState, type ReactNode } from "react";
+import { Children, useRef, useState, type ReactNode } from "react";
 import { motion, useInView, type Variants } from "motion/react";
 
 type FadeUpListProps = {
@@ -67,12 +67,6 @@ export function FadeUpList({
         margin: "-15% 0px -15% 0px",
     });
 
-    useEffect(() => {
-        if (isInView) {
-            setHasEntered(true);
-        }
-    }, [isInView]);
-
     const animationState = isInView
         ? "visible"
         : hasEntered
@@ -86,6 +80,7 @@ export function FadeUpList({
             variants={containerVariants}
             initial="hidden"
             animate={animationState}
+            onViewportEnter={() => setHasEntered(true)}
             className={className}
         >
             {Children.map(children, (child, index) => (
