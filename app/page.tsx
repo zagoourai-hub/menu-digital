@@ -1,19 +1,28 @@
-import { Button } from "@/components/ui/button"
+import { About } from "./(section)/About"
+import HeroPage from "./(section)/Hero"
+import { MenuSection } from "./(section)/MenuSection"
+import { Banner } from "./(section)/Banner"
+import { Footer } from "./(section)/Footer"
+import { Navbar } from "./(section)/Navbar"
+import { Contact } from "./(section)/Contact"
+import { Highlights } from "./(section)/Highlights"
+import { ErrorBoundary } from "@/components/error-fallback"
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
+    <>
+    <Navbar />
+    <main id="beranda">
+     <HeroPage />
+    <Highlights />
+    <About />
+      <ErrorBoundary title="Menu belum dapat dimuat" description="Daftar menu sedang tidak tersedia. Silakan coba lagi.">
+        <MenuSection />
+      </ErrorBoundary>
+    <Banner />
+    <Contact />
+    </main>
+    <div className="pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0"><Footer /></div>
+    </>
   )
 }

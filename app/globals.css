@@ -4,6 +4,67 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Registration gets its own composition without changing the shared login layout. */
+.auth-layout:has(.register-page) {
+  background: var(--muted);
+}
+
+.auth-layout:has(.register-page) .auth-content {
+  background: var(--background);
+}
+
+.register-welcome {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.register-welcome::before {
+  content: "";
+  width: 1.75rem;
+  height: 2px;
+  background: var(--primary);
+}
+
+.register-dot { color: var(--primary); }
+
+.register-page [data-slot="input"] {
+  height: 3.5rem;
+  border-radius: 0.75rem;
+  border-color: var(--border);
+  background: var(--background);
+  padding-inline: 1rem;
+}
+
+.register-page button[type="submit"] {
+  height: 3.5rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+}
+
+@media (min-width: 1024px) {
+  .auth-layout:has(.register-page) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .auth-layout:has(.register-page) .auth-visual {
+    order: -1;
+    min-height: calc(100dvh - 2rem);
+    border-radius: 1.5rem;
+  }
+
+  .auth-layout:has(.register-page) .auth-content {
+    min-height: calc(100dvh - 2rem);
+    border-radius: 1.5rem;
+  }
+
+  .auth-layout:has(.register-page) .auth-body {
+    max-width: 26rem;
+  }
+}
+
 :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.147 0.004 49.25);
@@ -74,6 +135,7 @@
 }
 
 @theme inline {
+    --animate-shine: shine var(--duration) infinite linear;
     --font-sans: var(--font-sans);
     --font-heading: var(--font-heading);
     --color-sidebar-ring: var(--sidebar-ring);
@@ -114,6 +176,29 @@
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
+    --animate-marquee: marquee var(--duration) infinite linear;
+    --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+        }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+        }
+    }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+        }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+        }
+    }
+}
+
+@keyframes shine {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
 }
 
 @layer base {
@@ -129,4 +214,8 @@
   html {
     @apply font-sans;
     }
+}
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
 }
