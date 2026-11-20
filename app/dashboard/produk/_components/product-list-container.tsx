@@ -13,7 +13,7 @@ type ProdukResponse = {
   produk: Product[]
 }
 
-export function ProductListContainer() {
+export function ProductListContainer({ canManage }: { canManage: boolean }) {
   const [products, setProducts] = useState<Product[]>()
   const [error, setError] = useState("")
 
@@ -42,5 +42,11 @@ export function ProductListContainer() {
   }
 
   if (!products) return <p role="status" className="text-sm text-muted-foreground">Memuat daftar produk...</p>
-  return <ProductList products={products} />
+  async function deleteProduct(id: string) {
+    const response = await axios.delete<{ success: boolean; message: string }>(`/api/produk/${encodeURIComponent(id)}`)
+    if (!response.data.success) throw new Error(response.data.message)
+    setProducts((current) => current?.filter((product) => product.id !== id))
+  }
+
+  return <ProductList products={products} canManage={canManage} onDelete={canManage ? deleteProduct : undefined} />
 }

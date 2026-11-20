@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import {  registerSchema } from "@/lib/schemas/auth.schema"
 import axios from "axios";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
-import { AlertCircle, CheckCircle } from "lucide-react"
+import { AlertCircle, CheckCircle, Eye, EyeOff } from "lucide-react"
 
 type FormValues = z.infer<typeof registerSchema>
 
@@ -53,7 +53,8 @@ type RegisterResponse = {
 
 export function RegisterForm() {
   const [success, setSucces] = React.useState<string | null>(null)
-  const {handleSubmit, setError, reset, control, formState : {isSubmitting, errors, isSubmitSuccessful}} = useForm<FormValues>({
+  const [showPassword, setShowPassword] = React.useState(false)
+  const {handleSubmit, setError, reset, control, formState : {isSubmitting, errors}} = useForm<FormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
@@ -131,7 +132,7 @@ export function RegisterForm() {
       </div>
 
       <FieldGroup className="gap-6">
-        {fields.map((item, index) => (
+        {fields.map((item) => (
           <FieldGroup key={item.name} className="gap-5">
             <Controller
               control={control}
@@ -139,7 +140,14 @@ export function RegisterForm() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor={item.name}>{item.label}</FieldLabel>
-                  <Input {...field} id={item.name} autoComplete={item.name} placeholder={item.placeholder} className="h-12" aria-invalid={fieldState.invalid} type={item.type}/>
+                  <div className="relative">
+                    <Input {...field} id={item.name} autoComplete={item.name === "password" ? "new-password" : item.name} placeholder={item.placeholder} className={item.name === "password" ? "h-12 pr-12" : "h-12"} aria-invalid={fieldState.invalid} type={item.name === "password" && showPassword ? "text" : item.type}/>
+                    {item.name === "password" && (
+                      <button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"} aria-controls="password" aria-pressed={showPassword} className="absolute inset-y-0 right-1 flex w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring">
+                        {showPassword ? <EyeOff className="size-5" aria-hidden="true" /> : <Eye className="size-5" aria-hidden="true" />}
+                      </button>
+                    )}
+                  </div>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}

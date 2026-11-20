@@ -7,9 +7,8 @@ import { ImageStorageService } from "./image.service";
 export class ProdukServices{
     constructor(private db: PrismaClient, private storage : ImageStorageService) {}
 
-    async findAll(actor: Actor) {
+    async findAll() {
         return this.db.produk.findMany({
-            where: actor.role === Role.ADMIN ? {} : {authorId: actor.id},
 
 
             include: {

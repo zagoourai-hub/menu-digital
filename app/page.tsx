@@ -7,11 +7,13 @@ import { Navbar } from "./(section)/Navbar"
 import { Contact } from "./(section)/Contact"
 import { Highlights } from "./(section)/Highlights"
 import { ErrorBoundary } from "@/components/error-fallback"
+import { getToko } from "@/lib/server/toko.service"
 
-export default function Page() {
+export default async function Page() {
+  const toko = await getToko()
   return (
     <>
-    <Navbar />
+    <Navbar storeName={toko.nama} />
     <main id="beranda">
      <HeroPage />
     <Highlights />

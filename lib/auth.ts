@@ -15,7 +15,6 @@ const credentialsSchema = z.object({
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(prisma),
-    session: { strategy: "jwt" },
     ...authConfig,
     callbacks: {
         async jwt({token,user}) {

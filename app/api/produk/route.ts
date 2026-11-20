@@ -26,7 +26,7 @@ export async function GET() {
             );
         }   
 
-        const produk = await produkService.findAll(actor);
+        const produk = await produkService.findAll();
 
         return NextResponse.json({
             success: true,
@@ -53,6 +53,10 @@ export async function POST(request: Request) {
                 { success: false, message: "Silakan login" },
                 { status: 401 },
             );
+        }
+
+        if (actor.role !== "ADMIN") {
+            return NextResponse.json({ success: false, message: "Hanya admin yang dapat menambah produk." }, { status: 403 });
         }
 
         const formData = await request.formData()

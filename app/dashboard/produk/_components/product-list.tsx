@@ -13,9 +13,10 @@ import type { Product } from "../_lib/product.schema"
 interface ProductListProps {
   products?: Product[]
   onDelete?: (id: string) => void | Promise<void>
+  canManage?: boolean
 }
 
-export function ProductList({ products, onDelete }: ProductListProps) {
+export function ProductList({ products, onDelete, canManage = false }: ProductListProps) {
   const [selected, setSelected] = useState<Product | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [error, setError] = useState("")
@@ -44,7 +45,7 @@ export function ProductList({ products, onDelete }: ProductListProps) {
         <span className="flex size-12 items-center justify-center rounded-full bg-muted"><PackageSearch className="size-5" aria-hidden="true" /></span>
         <h2 className="mt-5 font-heading text-lg font-bold">{products ? "Belum ada produk" : "Daftar produk belum terhubung"}</h2>
         <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">{products ? "Tambahkan produk pertama untuk mulai mengisi katalog." : "Hubungkan sumber data untuk menampilkan dan mengelola produk."}</p>
-        <Link href="/dashboard/produk/tambah" className="mt-6 text-sm font-semibold underline decoration-primary decoration-2 underline-offset-4">Buka form tambah produk</Link>
+        {canManage && <Link href="/dashboard/produk/tambah" className="mt-6 text-sm font-semibold underline decoration-primary decoration-2 underline-offset-4">Buka form tambah produk</Link>}
       </div>
     )
   }
@@ -54,14 +55,14 @@ export function ProductList({ products, onDelete }: ProductListProps) {
       <div className="overflow-x-auto rounded-2xl border border-border bg-card">
         <table className="w-full min-w-[640px] text-left text-sm">
           <caption className="sr-only">Daftar produk</caption>
-          <thead className="border-b border-border bg-muted/50 text-muted-foreground"><tr><th scope="col" className="px-5 py-4 font-medium">Produk</th><th scope="col" className="px-5 py-4 font-medium">Status</th><th scope="col" className="px-5 py-4 font-medium">Harga</th><th scope="col" className="px-5 py-4 text-right font-medium">Tindakan</th></tr></thead>
+          <thead className="border-b border-border bg-muted/50 text-muted-foreground"><tr><th scope="col" className="px-5 py-4 font-medium">Produk</th><th scope="col" className="px-5 py-4 font-medium">Status</th><th scope="col" className="px-5 py-4 font-medium">Harga</th>{canManage && <th scope="col" className="px-5 py-4 text-right font-medium">Tindakan</th>}</tr></thead>
           <tbody className="divide-y divide-border">
             {products.map((product) => (
               <tr key={product.id}>
                 <td className="px-5 py-4"><div className="flex items-center gap-3"><div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-muted">{product.imageUrl ? <Image src={product.imageUrl} alt={product.title} fill sizes="48px" unoptimized className="object-cover" /> : <div className="flex size-full items-center justify-center text-xs text-muted-foreground">—</div>}</div><span className="font-semibold">{product.title}</span></div></td>
                 <td className="px-5 py-4 text-muted-foreground">{product.published ? "Dipublikasikan" : "Draft"}</td>
                 <td className="px-5 py-4">Rp {product.price.toLocaleString("id-ID")}</td>
-                <td className="px-5 py-4"><div className="flex justify-end gap-2"><Link href={`/dashboard/produk/${encodeURIComponent(product.id)}/edit`} className="inline-flex size-9 items-center justify-center rounded-full border border-border hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring" aria-label={`Edit ${product.title}`}><Pencil className="size-4" aria-hidden="true" /></Link><Button type="button" variant="outline" size="icon" aria-label={`Hapus ${product.title}`} onClick={() => { setError(""); setSelected(product) }}><Trash2 aria-hidden="true" /></Button></div></td>
+                {canManage && <td className="px-5 py-4"><div className="flex justify-end gap-2"><Link href={`/dashboard/produk/${encodeURIComponent(product.id)}/edit`} className="inline-flex size-9 items-center justify-center rounded-full border border-border hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring" aria-label={`Edit ${product.title}`}><Pencil className="size-4" aria-hidden="true" /></Link><Button type="button" variant="outline" size="icon" aria-label={`Hapus ${product.title}`} onClick={() => { setError(""); setSelected(product) }}><Trash2 aria-hidden="true" /></Button></div></td>}
               </tr>
             ))}
           </tbody>

@@ -18,14 +18,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const { id } = await params
   if (!z.uuid().safeParse(id).success) return Response.json({ message: "ID pesanan tidak valid." }, { status: 400 })
 
-  const order = await prisma.pesanan.findUnique({ where: { id }, select: { produkId: true } })
+  const order = await prisma.pesanan.findUnique({ where: { id }, select: { produkId: true, fulfillment: true } })
   if (!order) return Response.json({ message: "Pesanan tidak ditemukan." }, { status: 404 })
-  if (actor.role !== "ADMIN") {
-    const product = await prisma.produk.findFirst({ where: { id: order.produkId, authorId: actor.id }, select: { id: true } })
-    if (!product) return Response.json({ message: "Pesanan tidak ditemukan." }, { status: 404 })
-  }
 
-  const proses = nextStatus[input.data.current as StatusProses]
+  const proses = input.data.current === "DIBUAT" && order.fulfillment === "PICKUP"
+    ? "SELESAI"
+    : nextStatus[input.data.current as StatusProses]
   if (!proses) return Response.json({ message: "Status tidak valid." }, { status: 400 })
   const result = await prisma.pesanan.updateMany({
     where: { id, status: "paid", proses: input.data.current },

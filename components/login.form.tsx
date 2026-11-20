@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { LoaderCircle } from "lucide-react"
+import { Eye, EyeOff, LoaderCircle } from "lucide-react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -35,6 +35,7 @@ const fields: FieldConfig[] = [
 export function LoginForm() {
   const router = useRouter()
   const [success, setSuccess] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
@@ -77,7 +78,14 @@ export function LoginForm() {
         {fields.map((field) => (
           <Field key={field.name} data-invalid={!!errors[field.name]}>
             <FieldLabel htmlFor={`login-${field.name}`}>{field.label}</FieldLabel>
-            <Input id={`login-${field.name}`} type={field.type} autoComplete={field.name === "password" ? "current-password" : field.name} placeholder={field.placeholder} className="h-12" aria-invalid={!!errors[field.name]} {...register(field.name)} />
+            <div className="relative">
+              <Input id={`login-${field.name}`} type={field.name === "password" && showPassword ? "text" : field.type} autoComplete={field.name === "password" ? "current-password" : field.name} placeholder={field.placeholder} className={field.name === "password" ? "h-12 pr-12" : "h-12"} aria-invalid={!!errors[field.name]} {...register(field.name)} />
+              {field.name === "password" && (
+                <button type="button" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"} aria-controls="login-password" aria-pressed={showPassword} className="absolute inset-y-0 right-1 flex w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring">
+                  {showPassword ? <EyeOff className="size-5" aria-hidden="true" /> : <Eye className="size-5" aria-hidden="true" />}
+                </button>
+              )}
+            </div>
             {errors[field.name] && <FieldError errors={[errors[field.name]]} />}
           </Field>
         ))}

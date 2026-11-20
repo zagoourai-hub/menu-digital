@@ -47,6 +47,7 @@ export function Menus({ menus }: { menus: Menu[] }) {
         <h2 id="menu-heading" className="font-heading text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl">
           Pilih segarmu hari ini.
         </h2>
+        <p className="mt-3 text-sm font-medium text-muted-foreground">Buka jam 08.00 · Tutup jam 22.00</p>
         <motion.div variants={containerVariants}
           initial="hidden"
           whileInView="visible"

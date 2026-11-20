@@ -29,6 +29,9 @@ export async function PATCH(
                 { status: 401 },
             );
         }
+        if (actor.role !== "ADMIN") {
+            return NextResponse.json({ success: false, message: "Hanya admin yang dapat mengubah produk." }, { status: 403 });
+        }
 
         const { id } = await params;
         const body: unknown = await request
@@ -84,6 +87,9 @@ export async function DELETE(
                 { success: false, message: "Belum login" },
                 { status: 401 },
             );
+        }
+        if (actor.role !== "ADMIN") {
+            return NextResponse.json({ success: false, message: "Hanya admin yang dapat menghapus produk." }, { status: 403 });
         }
 
         const { id } = await params;

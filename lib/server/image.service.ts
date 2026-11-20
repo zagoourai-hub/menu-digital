@@ -11,16 +11,15 @@ export class ImageValidationError extends Error {
 }
 
 
-const UPLOAD_DIR = path.join(
-    process.cwd(),
-    "public",
-    "uploads",
-    "products",
-);
-
 const MAX_SIZE = 5 * 1024 * 1024;
 
 export class ImageStorageService {
+    private readonly uploadDir: string;
+
+    constructor(private readonly folder: "products" | "profiles" = "products") {
+        this.uploadDir = path.join(process.cwd(), "public", "uploads", folder);
+    }
+
     async upload(file: File): Promise<string> {
         if (file.size === 0 || file.size > MAX_SIZE) {
             throw new ImageValidationError(
@@ -74,30 +73,29 @@ export class ImageStorageService {
             );
         }
 
-        await mkdir(UPLOAD_DIR, { recursive: true });
+        await mkdir(this.uploadDir, { recursive: true });
 
         const filename = `${randomUUID()}.webp`;
 
         await writeFile(
-            path.join(UPLOAD_DIR, filename),
+            path.join(this.uploadDir, filename),
             optimized,
             { flag: "wx" },
         );
 
-        return `/uploads/products/${filename}`;
+        return `/uploads/${this.folder}/${filename}`;
     }
 
     async remove(imageUrl: string): Promise<void> {
         if (
-            !/^\/uploads\/products\/[a-f0-9-]{36}\.webp$/.test(
-                imageUrl,
-            )
+            !imageUrl.startsWith(`/uploads/${this.folder}/`) ||
+            !/^[a-f0-9-]{36}\.webp$/.test(imageUrl.slice(`/uploads/${this.folder}/`.length))
         ) {
             throw new Error("Path gambar tidak valid");
         }
 
         await unlink(
-            path.join(UPLOAD_DIR, path.basename(imageUrl)),
+            path.join(this.uploadDir, path.basename(imageUrl)),
         );
     }
 }

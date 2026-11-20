@@ -58,8 +58,25 @@ model Pesanan {
   status      String   @default("creating")
   proses      String   @default("PENDING")
   snapToken   String?
+  customerName String?
+  customerPhone String?
+  fulfillment String?
+  deliveryAddress String?
+  distanceKm Float?
+  deliveryFee Int @default(0)
+  productPrice Int?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Toko {
+  id        String   @id
+  nama      String
+  whatsapp  String
+  jamBuka   String
+  jamTutup  String
+  buka      Boolean  @default(true)
+  updatedAt DateTime @updatedAt
 }
 
 model Account {

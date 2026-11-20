@@ -22,7 +22,7 @@ export function DashboardSidebar() {
       </div>
       {isOpen && <p className="mt-1 text-xs text-muted-foreground">Digital menu workspace</p>}
       <div className="mt-12"><DashboardNavigation collapsed={!isOpen} /></div>
-      <a href="/dashboard#akun" title={!isOpen ? "Akun Anda" : undefined} className={cn("mt-auto flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary", !isOpen && "justify-center px-0")}><CircleUserRound className="size-5 shrink-0" aria-hidden="true" /><span className={!isOpen ? "sr-only" : undefined}>Akun Anda</span></a>
+      <Link href="/dashboard/akun" title={!isOpen ? "Akun Anda" : undefined} className={cn("mt-auto flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary", !isOpen && "justify-center px-0")}><CircleUserRound className="size-5 shrink-0" aria-hidden="true" /><span className={!isOpen ? "sr-only" : undefined}>Akun Anda</span></Link>
     </aside>
   )
 }
