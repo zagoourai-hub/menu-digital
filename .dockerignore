@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.env*
+*.db
+*.db-*
+*.sqlite*
+generated
+.agents
+.claude
+.opencode
+.windsurf
+.playwright-mcp
+.taste-skill
+coverage
+*.log

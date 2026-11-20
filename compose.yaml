@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-3001}:3000"
+    env_file:
+      - .env.docker
+    environment:
+      DATABASE_URL: file:/app/data/dev.db
+    volumes:
+      - esteh-data:/app/data
+      - esteh-uploads:/app/public/uploads
+    restart: unless-stopped
+
+volumes:
+  esteh-data:
+  esteh-uploads:
