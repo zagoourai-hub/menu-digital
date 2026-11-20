@@ -2,6 +2,25 @@
 
 This is a Next.js template with shadcn/ui.
 
+## Panduan visual
+
+Contoh tampilan berikut menunjukkan alur registrasi dan dashboard. Gambar
+merupakan dokumentasi desain sebelumnya; beberapa detail dapat berbeda dari
+versi aplikasi terkini.
+
+### Registrasi
+
+![Contoh halaman registrasi EsTeh](docs/images/registrasi.png)
+
+Buat akun melalui halaman registrasi, lalu masuk untuk membuka dashboard.
+
+### Dashboard
+
+![Contoh dashboard EsTeh](docs/images/dashboard.png)
+
+Gunakan dashboard untuk melihat katalog dan status pesanan. Pengelolaan produk
+dan pengaturan toko hanya tersedia untuk admin.
+
 ## Adding components
 
 To add components to your app, run the following command:
